@@ -38,6 +38,7 @@ public class Slash : MonoBehaviour
         if (collisionParent.TryGetComponent<IAttackable>(out IAttackable attackCol))
         {
             attackCol.IsAttacked(gameObject);
+            // TODO: Trigger hitstop. Not sure where to put this yet...
         }
         if (collisionParent.TryGetComponent<IDamageable>(out IDamageable damageCol))
         {
