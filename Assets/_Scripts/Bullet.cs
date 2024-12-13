@@ -115,6 +115,7 @@ public class Bullet : MonoBehaviour, IAttackable
             transform.Rotate(new Vector3(0f, 0f, 180f));
         }
         // TODO: Trigger hitstop. Maybe through an event?
+        // TODO: Create new manager class that handles hitstops.
         // Change source type depending on who attacked it
         gameObject.tag = source.tag;
         // Make bullet move faster and reset lifespan
