@@ -38,7 +38,7 @@ public class Player : MonoBehaviour, IDamageable
     private void TickAttackCooldown()
     {
         if (attackCooldownTimer <= 0f) { return; }
-        attackCooldownTimer -= Time.deltaTime;
+        attackCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
     }
 
     [Tooltip("Player attack. Spawns a pooled slash object.")]

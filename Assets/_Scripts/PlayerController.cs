@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         // Move via Rigidbody2D
-        rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime));
+        rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime) * GameManager.Instance.InGameTimeScale);
     }
 
     [Tooltip("Input System Attack Callback.")]
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
             // Get rotation
             Quaternion rotation = Quaternion.AngleAxis(angle - offset, Vector3.forward);
             // Rotate the player
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
         }
     }
 

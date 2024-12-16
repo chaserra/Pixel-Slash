@@ -124,6 +124,17 @@
                 },
                 {
                     "name": "",
+                    "id": "38d04ebc-a01a-4f28-9554-e4fd198b7bec",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ef1443c6-cb3a-43d8-813f-79d12277438c",
                     "path": "<Keyboard>/shift",
                     "interactions": "",

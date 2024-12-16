@@ -78,13 +78,13 @@ public class Bullet : MonoBehaviour, IAttackable
         {
             Deactivate();
         }
-        lifespan += Time.deltaTime;
+        lifespan += Time.deltaTime * GameManager.Instance.InGameTimeScale;
     }
 
     [Tooltip("Move the bullet towards it's up direction.")]
     private void Move()
     {
-        rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime));
+        rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime) * GameManager.Instance.InGameTimeScale);
     }
 
     public void IsAttacked(GameObject source)
@@ -114,13 +114,14 @@ public class Bullet : MonoBehaviour, IAttackable
             // Flip to opposite direction (back to source of bullet)
             transform.Rotate(new Vector3(0f, 0f, 180f));
         }
-        // TODO: Trigger hitstop. Maybe through an event?
         // TODO: Create new manager class that handles hitstops.
         // Change source type depending on who attacked it
         gameObject.tag = source.tag;
         // Make bullet move faster and reset lifespan
         MoveSpeed *= 3f;
         lifespan = 0f;
+        // Invoke events
+        GameManager.Instance.InvokeOnHitEvents();
     }
 
     [Tooltip("Soft disable. Allows trail to finish before full deactivation.")]

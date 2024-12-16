@@ -15,7 +15,7 @@ public static class SpriteEffects
             yield return null;
             sprite.color = originalColor;
             yield return null;
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * GameManager.Instance.InGameTimeScale;
         }
         sprite.color = originalColor;
         yield return null;
@@ -33,7 +33,7 @@ public static class SpriteEffects
             yield return new WaitForSeconds(flashGaps);
             sprite.color = originalColor;
             yield return new WaitForSeconds(flashGaps);
-            timer += Time.deltaTime;
+            timer += Time.deltaTime * GameManager.Instance.InGameTimeScale;
         }
         sprite.color = originalColor;
         yield return null;

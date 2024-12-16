@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour, IDamageable
         // Get rotation
         Quaternion rotation = Quaternion.AngleAxis(angle - offset, Vector3.forward);
         // Rotate the player
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
     }
 
     [Tooltip("Shoot bullets every set time with random offset.")]
@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour, IDamageable
             GenerateShootCooldown();
         }
         // Increment timer
-        shootTimer += Time.deltaTime;
+        shootTimer += Time.deltaTime * GameManager.Instance.InGameTimeScale;
     }
 
     private IEnumerator ShootCoroutine()

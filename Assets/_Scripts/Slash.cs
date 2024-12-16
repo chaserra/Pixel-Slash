@@ -7,7 +7,7 @@ public class Slash : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void Update()
@@ -23,7 +23,7 @@ public class Slash : MonoBehaviour
     [Tooltip("Disable the object when lifespan value is met.")]
     private void TickLifetime()
     {
-        lifespanTimer += Time.deltaTime;
+        lifespanTimer += Time.deltaTime * GameManager.Instance.InGameTimeScale;
         if (lifespanTimer >= _maxLifespan)
         {
             gameObject.SetActive(false);
