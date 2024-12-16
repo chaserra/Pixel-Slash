@@ -114,7 +114,6 @@ public class Bullet : MonoBehaviour, IAttackable
             // Flip to opposite direction (back to source of bullet)
             transform.Rotate(new Vector3(0f, 0f, 180f));
         }
-        // TODO: Create new manager class that handles hitstops.
         // Change source type depending on who attacked it
         gameObject.tag = source.tag;
         // Make bullet move faster and reset lifespan

@@ -47,12 +47,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Timeshift"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""ad4934d2-cc2b-4d23-b8c5-c2de7059adcc"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -178,6 +178,131 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Time Dilation"",
+            ""id"": ""c462961a-3281-4517-93c8-64f629164e7a"",
+            ""actions"": [
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""e57fd84a-b7ff-499e-85a3-e1d68ab91097"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Dash Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb5d8a6d-27d6-43a4-991a-1af6799d1bc6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""d2750892-02a6-4808-8d62-c2371eca68bd"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""681bfbe0-0e11-44b8-a902-0fe28f0d50c2"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""9669f9aa-4235-404d-905a-34ba2a8f3275"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0bb15430-5d5c-4c2c-b463-6d520ca191f1"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""3727f814-60e1-4b75-bab8-2afb023c33d1"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c385d05c-8481-4305-837c-47935a43c5e2"",
+                    ""path"": ""<Joystick>/stick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6cc307da-38d4-4a17-8d17-52fad5444a50"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb093076-6e84-458c-b766-e4351c341569"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0915f12-561a-45de-a7e9-a2e8927ac9c5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -187,11 +312,16 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
         m_Movement_Attack = m_Movement.FindAction("Attack", throwIfNotFound: true);
         m_Movement_Timeshift = m_Movement.FindAction("Timeshift", throwIfNotFound: true);
+        // Time Dilation
+        m_TimeDilation = asset.FindActionMap("Time Dilation", throwIfNotFound: true);
+        m_TimeDilation_Rotate = m_TimeDilation.FindAction("Rotate", throwIfNotFound: true);
+        m_TimeDilation_DashAttack = m_TimeDilation.FindAction("Dash Attack", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_Movement.enabled, "This will cause a leak and performance issues, PlayerControls.Movement.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_TimeDilation.enabled, "This will cause a leak and performance issues, PlayerControls.TimeDilation.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -311,10 +441,69 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Time Dilation
+    private readonly InputActionMap m_TimeDilation;
+    private List<ITimeDilationActions> m_TimeDilationActionsCallbackInterfaces = new List<ITimeDilationActions>();
+    private readonly InputAction m_TimeDilation_Rotate;
+    private readonly InputAction m_TimeDilation_DashAttack;
+    public struct TimeDilationActions
+    {
+        private @PlayerControls m_Wrapper;
+        public TimeDilationActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Rotate => m_Wrapper.m_TimeDilation_Rotate;
+        public InputAction @DashAttack => m_Wrapper.m_TimeDilation_DashAttack;
+        public InputActionMap Get() { return m_Wrapper.m_TimeDilation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TimeDilationActions set) { return set.Get(); }
+        public void AddCallbacks(ITimeDilationActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TimeDilationActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TimeDilationActionsCallbackInterfaces.Add(instance);
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @DashAttack.started += instance.OnDashAttack;
+            @DashAttack.performed += instance.OnDashAttack;
+            @DashAttack.canceled += instance.OnDashAttack;
+        }
+
+        private void UnregisterCallbacks(ITimeDilationActions instance)
+        {
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @DashAttack.started -= instance.OnDashAttack;
+            @DashAttack.performed -= instance.OnDashAttack;
+            @DashAttack.canceled -= instance.OnDashAttack;
+        }
+
+        public void RemoveCallbacks(ITimeDilationActions instance)
+        {
+            if (m_Wrapper.m_TimeDilationActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(ITimeDilationActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TimeDilationActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TimeDilationActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public TimeDilationActions @TimeDilation => new TimeDilationActions(this);
     public interface IMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnTimeshift(InputAction.CallbackContext context);
+    }
+    public interface ITimeDilationActions
+    {
+        void OnRotate(InputAction.CallbackContext context);
+        void OnDashAttack(InputAction.CallbackContext context);
     }
 }
