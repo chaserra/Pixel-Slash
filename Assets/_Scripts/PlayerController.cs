@@ -1,3 +1,4 @@
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -9,27 +10,39 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _rotateSpeed = 5f;
 
     private Player player;
-    private PlayerControls playerControls;
     private Rigidbody2D rb;
     private Vector2 movement;
+
+    // Input System
+    private PlayerInput playerInput;
+    // Store Control Actions
+    private InputAction moveAction;
+    private InputAction attackAction;
+    private InputAction timeShiftAction;
+    private InputAction rotateAction;
+    private InputAction dashAttackAction;
 
     private void Awake()
     {
         player = GetComponent<Player>();
-        playerControls = new PlayerControls();
+        playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         
     }
 
     private void OnEnable()
     {
-        playerControls.Enable();
-        playerControls.Movement.Attack.performed += OnAttack;
+        playerInput.SwitchCurrentActionMap("Movement");
+
     }
 
     private void Start()
     {
-        
+        moveAction = playerInput.actions["Move"];
+        attackAction = playerInput.actions["Attack"];
+        timeShiftAction = playerInput.actions["Timeshift"];
+        rotateAction = playerInput.actions["Rotate"];
+        dashAttackAction = playerInput.actions["Dash Attack"];
     }
 
     private void Update()
@@ -45,31 +58,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        playerControls.Disable();
-        playerControls.Movement.Attack.performed -= OnAttack;
-        playerControls.TimeDilation.DashAttack.performed -= OnDashAttack;
+        //playerControls.Disable();
+        //playerControls.Movement.Attack.performed -= OnAttack;
+        //playerControls.TimeDilation.DashAttack.performed -= OnDashAttack;
     }
 
     [Tooltip("Gets player input.")]
     private void GetInput()
     {
+        // TODO: Change this so action maps are switched dynamically. Attack should be the same as DashAttack
         // Check if timeshift button is held down
-        if (playerControls.Movement.Timeshift.ReadValue<float>() > 0f)
+        if (timeShiftAction.ReadValue<float>() > 0f)
         {
+            playerInput.actions.FindActionMap("Time Dilation").Enable();
             // Stop movement
             movement = Vector2.zero;
-            // Override controls
-            playerControls.Movement.Attack.performed -= OnAttack;
-            playerControls.TimeDilation.DashAttack.performed += OnDashAttack;
             // TODO: Just rotate the player
         }
         else
         {
-            // Override controls
-            playerControls.Movement.Attack.performed += OnAttack;
-            playerControls.TimeDilation.DashAttack.performed -= OnDashAttack;
+            playerInput.actions.FindActionMap("Movement").Enable();
             // Get movement values from Input System
-            movement = playerControls.Movement.Move.ReadValue<Vector2>();
+            movement = moveAction.ReadValue<Vector2>();
+        }
+
+        if (attackAction.IsPressed() || dashAttackAction.IsPressed())
+        {
+            OnAttack();
         }
     }
 
@@ -80,13 +95,13 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime) * GameManager.Instance.InGameTimeScale);
     }
 
-    [Tooltip("Input System Attack Callback.")]
-    private void OnAttack(InputAction.CallbackContext context)
+    [Tooltip("Input System Attack.")]
+    private void OnAttack()
     {
         player.Attack();
     }
 
-    [Tooltip("Input System Dash Attack Callback.")]
+    [Tooltip("Input System Dash Attack.")]
     private void OnDashAttack(InputAction.CallbackContext context)
     {
         // TODO: Perform a dash attack

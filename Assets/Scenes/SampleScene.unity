@@ -2551,6 +2551,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_NotificationBehavior
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_ActionId
+      value: c6e1a46c-9da4-4e45-a2f2-c6aabf0a549a
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[1].m_ActionId
+      value: 9e70c975-a156-436d-bcf1-a0ac37eae7b3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_ActionId
+      value: ad4934d2-cc2b-4d23-b8c5-c2de7059adcc
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_ActionId
+      value: e57fd84a-b7ff-499e-85a3-e1d68ab91097
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_ActionId
+      value: eb5d8a6d-27d6-43a4-991a-1af6799d1bc6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_ActionName
+      value: 'Movement/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[1].m_ActionName
+      value: 'Movement/Attack[/Keyboard/space,/Mouse/leftButton]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[2].m_ActionName
+      value: 'Movement/Timeshift[/Keyboard/shift]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_ActionName
+      value: 'Time Dilation/Rotate[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_ActionName
+      value: 'Time Dilation/Dash Attack[/Keyboard/space,/Mouse/leftButton]'
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
