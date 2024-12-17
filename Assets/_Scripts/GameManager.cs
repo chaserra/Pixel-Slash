@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private float _pauseScale = 0f;
     private float _playScale = 1f;
     private float _slowTimeScale = 0.2f;
+    private bool _timeSlowed = false;
 
     private HitStop _hitStop;
 
@@ -60,6 +61,14 @@ public class GameManager : MonoBehaviour
     public void ResumeGame()
     {
         InGameTimeScale = _playScale;
+        IsTimeSlowed = false;
+    }
+
+    [Tooltip("Slows down the game using a special timescale.")]
+    public void SlowDownTime()
+    {
+        InGameTimeScale = _slowTimeScale;
+        IsTimeSlowed = true;
     }
 
     public float HitStopDuration
@@ -71,5 +80,16 @@ public class GameManager : MonoBehaviour
     {
         get { return _inGameTimeScale; }
         private set { _inGameTimeScale = value; }
+    }
+
+    public float SlowTimeScale
+    {
+        get { return _slowTimeScale; }
+    }
+
+    public bool IsTimeSlowed
+    {
+        get { return _timeSlowed; }
+        private set { _timeSlowed = value; }
     }
 }

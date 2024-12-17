@@ -15,6 +15,7 @@ public class Player : MonoBehaviour, IDamageable
     private SpriteRenderer sprite;
     private float attackCooldownTimer = 0f;
     private bool invincible = false;
+    private bool _timeShiftActive = false;
 
     private void Awake()
     {
@@ -61,6 +62,13 @@ public class Player : MonoBehaviour, IDamageable
         attackCooldownTimer = AttackCooldown;
     }
 
+    [Tooltip("Player dash attack. Attacks in a straight line slashing everything in its path.")]
+    public void DashAttack()
+    {
+        // TODO: Perform a dash attack
+        Debug.Log("Dash attack!");
+    }
+
     [Tooltip("Take damage then check if health is zero.")]
     public void TakeDamage(GameObject source)
     {
@@ -76,7 +84,7 @@ public class Player : MonoBehaviour, IDamageable
         if (Health <= 0 )
         {
             // TODO: Game Over
-            Debug.Log("Player has died.");
+            //Debug.Log("Player has died.");
         }
         else
         {
@@ -121,6 +129,12 @@ public class Player : MonoBehaviour, IDamageable
     {
         get { return _attackCooldown; }
         private set { _attackCooldown = value; }
+    }
+
+    public bool TimeShiftActive
+    {
+        get { return _timeShiftActive; }
+        set { _timeShiftActive = value; }
     }
 
 }

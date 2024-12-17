@@ -117,7 +117,7 @@ public class Bullet : MonoBehaviour, IAttackable
         // Change source type depending on who attacked it
         gameObject.tag = source.tag;
         // Make bullet move faster and reset lifespan
-        MoveSpeed *= 3f;
+        MoveSpeed *= 5f;
         lifespan = 0f;
         // Invoke events
         GameManager.Instance.InvokeOnHitEvents();

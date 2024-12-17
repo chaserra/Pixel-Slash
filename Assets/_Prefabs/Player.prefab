@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 6
-  _rotateSpeed: 15
+  _rotateSpeed: 18
 --- !u!114 &7181992958459353768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 1
-  _attackCooldown: 0.7
+  _attackCooldown: 0.5
   slashPrefab: {fileID: 5880481135495040988, guid: 2aca22344288833428bab341bbc6f62a, type: 3}
   slashPoint: {fileID: 8992259032709385497}
 --- !u!114 &6761684968726473265

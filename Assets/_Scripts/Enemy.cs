@@ -90,13 +90,13 @@ public class Enemy : MonoBehaviour, IDamageable
         // Ignore self
         if (source.tag == "Enemy") { return; }
 
-        Debug.Log("Took damage from " + source.name + " from " + source.gameObject.tag);
+        //Debug.Log("Took damage from " + source.name + " from " + source.gameObject.tag);
         Health--;
 
         if (Health <= 0)
         {
             // TODO: Destroy/Pool enemy
-            Debug.Log(gameObject.name + " has died.");
+            //Debug.Log(gameObject.name + " has died.");
         }
     }
 

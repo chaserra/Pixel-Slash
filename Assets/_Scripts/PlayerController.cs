@@ -20,29 +20,29 @@ public class PlayerController : MonoBehaviour
     private InputAction attackAction;
     private InputAction timeShiftAction;
     private InputAction rotateAction;
-    private InputAction dashAttackAction;
 
     private void Awake()
     {
         player = GetComponent<Player>();
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
-        
-    }
 
-    private void OnEnable()
-    {
-        playerInput.SwitchCurrentActionMap("Movement");
-
-    }
-
-    private void Start()
-    {
         moveAction = playerInput.actions["Move"];
         attackAction = playerInput.actions["Attack"];
         timeShiftAction = playerInput.actions["Timeshift"];
         rotateAction = playerInput.actions["Rotate"];
-        dashAttackAction = playerInput.actions["Dash Attack"];
+    }
+
+    private void OnEnable()
+    {
+        playerInput.actions.FindActionMap("Movement").Enable();
+        playerInput.actions.FindActionMap("Time Dilation").Enable();
+        attackAction.performed += OnAttack;
+    }
+
+    private void Start()
+    {
+       
     }
 
     private void Update()
@@ -58,33 +58,33 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        //playerControls.Disable();
-        //playerControls.Movement.Attack.performed -= OnAttack;
-        //playerControls.TimeDilation.DashAttack.performed -= OnDashAttack;
+        playerInput.actions.FindActionMap("Movement").Disable();
+        playerInput.actions.FindActionMap("Time Dilation").Disable();
+        attackAction.performed -= OnAttack;
     }
 
     [Tooltip("Gets player input.")]
     private void GetInput()
     {
-        // TODO: Change this so action maps are switched dynamically. Attack should be the same as DashAttack
         // Check if timeshift button is held down
         if (timeShiftAction.ReadValue<float>() > 0f)
         {
-            playerInput.actions.FindActionMap("Time Dilation").Enable();
             // Stop movement
             movement = Vector2.zero;
+
+            // TODO: Slow down time via time dilation
+
+            player.TimeShiftActive = true;
             // TODO: Just rotate the player
         }
         else
         {
-            playerInput.actions.FindActionMap("Movement").Enable();
             // Get movement values from Input System
             movement = moveAction.ReadValue<Vector2>();
-        }
 
-        if (attackAction.IsPressed() || dashAttackAction.IsPressed())
-        {
-            OnAttack();
+            // TODO: Cancel slow down but make sure hitstop is not affected
+
+            player.TimeShiftActive = false;
         }
     }
 
@@ -95,17 +95,17 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime) * GameManager.Instance.InGameTimeScale);
     }
 
-    [Tooltip("Input System Attack.")]
-    private void OnAttack()
+    [Tooltip("Call the correct attack type depending on player state.")]
+    private void OnAttack(InputAction.CallbackContext context)
     {
-        player.Attack();
-    }
-
-    [Tooltip("Input System Dash Attack.")]
-    private void OnDashAttack(InputAction.CallbackContext context)
-    {
-        // TODO: Perform a dash attack
-        Debug.Log("Dash attack!");
+        if (!player.TimeShiftActive)
+        {
+            player.Attack();
+        }
+        else
+        {
+            player.DashAttack();
+        }
     }
 
     [Tooltip("Rotate player towards movement direction.")]
@@ -121,7 +121,15 @@ public class PlayerController : MonoBehaviour
             // Get rotation
             Quaternion rotation = Quaternion.AngleAxis(angle - offset, Vector3.forward);
             // Rotate the player
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
+            // If time is slowed down, rotate speed is slightly faster than special game time
+            if (GameManager.Instance.IsTimeSlowed)
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * (GameManager.Instance.InGameTimeScale * (.5f / GameManager.Instance.SlowTimeScale)));
+            }
+            else
+            {
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
+            }
         }
     }
 
