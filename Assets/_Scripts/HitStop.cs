@@ -40,10 +40,12 @@ public class HitStop
     IEnumerator TriggerHitStop()
     {
         // Briefly pause the game
+        GameManager.Instance.IsHitStopActive = true;
         GameManager.Instance.PauseGame();
         yield return new WaitForSeconds(GameManager.Instance.HitStopDuration);
         // Then revert back to normal in-game time
         GameManager.Instance.ResumeGame();
+        GameManager.Instance.IsHitStopActive = false;
     }
 
 }

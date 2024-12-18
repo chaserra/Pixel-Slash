@@ -2,20 +2,27 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // Singleton
     public static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
 
+    // Events
     public delegate void OnHit();
     public event OnHit e_Hit;
 
+    // Attributes
     [SerializeField] private float _hitStopDuration = 0.1f;
     [Tooltip("This is the special timescale used for the game. Prevents directly manipulating Unity's timescale.")]
     private float _inGameTimeScale = 1f;
     private float _pauseScale = 0f;
     private float _playScale = 1f;
     private float _slowTimeScale = 0.2f;
-    private bool _timeSlowed = false;
 
+    // State
+    private bool _timeSlowed = false;
+    private bool _isHitStopActive = false;
+
+    // References
     private HitStop _hitStop;
 
     private void Awake()
@@ -42,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        
+
     }
 
     [Tooltip("Adapter method to call OnHit events.")]
@@ -60,15 +67,24 @@ public class GameManager : MonoBehaviour
     [Tooltip("Resets the game's special timescale to normal speed.")]
     public void ResumeGame()
     {
+        if (_isHitStopActive) { return; } // Prioritise hitstop effect
         InGameTimeScale = _playScale;
-        IsTimeSlowed = false;
+        Time.timeScale = 1f;
+        //IsTimeSlowed = false;
     }
 
     [Tooltip("Slows down the game using a special timescale.")]
     public void SlowDownTime()
     {
+        if (_isHitStopActive) { return; } // Prioritise hitstop effect
+        if (IsTimeSlowed) { return; } // If time is already slowed, ignore this and use the TimeDilationDecay values instead
         InGameTimeScale = _slowTimeScale;
         IsTimeSlowed = true;
+    }
+
+    public void SetInGameTimeScale(float timeValue)
+    {
+        InGameTimeScale = timeValue;
     }
 
     public float HitStopDuration
@@ -90,6 +106,13 @@ public class GameManager : MonoBehaviour
     public bool IsTimeSlowed
     {
         get { return _timeSlowed; }
-        private set { _timeSlowed = value; }
+        set { _timeSlowed = value; }
     }
+
+    public bool IsHitStopActive
+    {
+        get { return _isHitStopActive; }
+        set { _isHitStopActive = value; }
+    }
+
 }

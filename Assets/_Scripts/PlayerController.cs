@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private Player player;
     private Rigidbody2D rb;
     private Vector2 movement;
+    private Vector2 rotationVector;
 
     // Input System
     private PlayerInput playerInput;
@@ -66,24 +67,29 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Gets player input.")]
     private void GetInput()
     {
+        // Read rotation input
+        rotationVector = rotateAction.ReadValue<Vector2>();
+
         // Check if timeshift button is held down
         if (timeShiftAction.ReadValue<float>() > 0f)
         {
             // Stop movement
             movement = Vector2.zero;
 
-            // TODO: Slow down time via time dilation
-
+            // Slow down time via time dilation
+            // TODO: Change below logic to be handled by TimeDilation. Controller should just notify if Shift is held down
+            GameManager.Instance.SlowDownTime();
             player.TimeShiftActive = true;
-            // TODO: Just rotate the player
         }
         else
         {
             // Get movement values from Input System
             movement = moveAction.ReadValue<Vector2>();
 
-            // TODO: Cancel slow down but make sure hitstop is not affected
-
+            // Cancel time dilation
+            // TODO: Change below logic to be handled by TimeDilation. Controller should just notify if Shift is no longer held down
+            GameManager.Instance.ResumeGame();
+            GameManager.Instance.IsTimeSlowed = false;
             player.TimeShiftActive = false;
         }
     }
@@ -112,10 +118,10 @@ public class PlayerController : MonoBehaviour
     private void Rotate()
     {
         // Only rotate if movement vector has a value.
-        if (movement.magnitude > 0f)
+        if (rotationVector.magnitude > 0f)
         {
             // Get angle to movement vector
-            float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
+            float angle = Mathf.Atan2(rotationVector.y, rotationVector.x) * Mathf.Rad2Deg;
             // Offset angle to make X horizontal and Y vertical
             float offset = 90f;
             // Get rotation
@@ -124,19 +130,13 @@ public class PlayerController : MonoBehaviour
             // If time is slowed down, rotate speed is slightly faster than special game time
             if (GameManager.Instance.IsTimeSlowed)
             {
-                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * (GameManager.Instance.InGameTimeScale * (.5f / GameManager.Instance.SlowTimeScale)));
+                transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * (GameManager.Instance.InGameTimeScale * (.25f / GameManager.Instance.SlowTimeScale)));
             }
             else
             {
                 transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
             }
         }
-    }
-
-    [Tooltip("Rotate player towards movement direction while in Time Dilation.")]
-    private void SpotRotate()
-    {
-        // TODO: Rotate in place. Or maybe put this inside the Rotate method above instead
     }
 
     public float MoveSpeed

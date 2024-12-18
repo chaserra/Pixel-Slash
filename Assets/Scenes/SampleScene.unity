@@ -2552,10 +2552,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
-      propertyPath: m_NotificationBehavior
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6761684968726473265, guid: 354db5d8e91b82c46a8c0084259bc3e1, type: 3}
       propertyPath: m_ActionEvents.Array.size
       value: 5
       objectReference: {fileID: 0}
