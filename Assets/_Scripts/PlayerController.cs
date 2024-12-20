@@ -2,10 +2,18 @@ using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
+using static Player;
+using static PlayerController;
+using static Unity.VisualScripting.Member;
 
 [RequireComponent(typeof(Player))]
 public class PlayerController : MonoBehaviour
 {
+    public delegate void OnShiftHeld();
+    public event OnShiftHeld e_ShiftHeld;
+    public delegate void OnShiftRelease();
+    public event OnShiftRelease e_ShiftReleased;
+
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _rotateSpeed = 5f;
 
@@ -39,6 +47,7 @@ public class PlayerController : MonoBehaviour
         playerInput.actions.FindActionMap("Movement").Enable();
         playerInput.actions.FindActionMap("Time Dilation").Enable();
         attackAction.performed += OnAttack;
+        player.e_TimeSlash += OnTimeSlash;
     }
 
     private void Start()
@@ -62,6 +71,7 @@ public class PlayerController : MonoBehaviour
         playerInput.actions.FindActionMap("Movement").Disable();
         playerInput.actions.FindActionMap("Time Dilation").Disable();
         attackAction.performed -= OnAttack;
+        player.e_TimeSlash -= OnTimeSlash;
     }
 
     [Tooltip("Gets player input.")]
@@ -71,26 +81,21 @@ public class PlayerController : MonoBehaviour
         rotationVector = rotateAction.ReadValue<Vector2>();
 
         // Check if timeshift button is held down
-        if (timeShiftAction.ReadValue<float>() > 0f)
+        if (timeShiftAction.ReadValue<float>() > 0f && player.CanUseTimeShift)
         {
             // Stop movement
             movement = Vector2.zero;
 
-            // Slow down time via time dilation
-            // TODO: Change below logic to be handled by TimeDilation. Controller should just notify if Shift is held down
-            GameManager.Instance.SlowDownTime();
-            player.TimeShiftActive = true;
+            // Trigger time dilate event
+            e_ShiftHeld?.Invoke();
         }
         else
         {
             // Get movement values from Input System
             movement = moveAction.ReadValue<Vector2>();
 
-            // Cancel time dilation
-            // TODO: Change below logic to be handled by TimeDilation. Controller should just notify if Shift is no longer held down
-            GameManager.Instance.ResumeGame();
-            GameManager.Instance.IsTimeSlowed = false;
-            player.TimeShiftActive = false;
+            // Trigger end of time dilate event
+            e_ShiftReleased?.Invoke();
         }
     }
 
@@ -137,6 +142,14 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
             }
         }
+    }
+
+    public void OnTimeSlash()
+    {
+        // TODO: Teleport player forward
+        Vector3 direction = (player.transform.TransformDirection(Vector3.up)).normalized;
+        Vector2 xyDir = direction;
+        transform.position = rb.position + player.TimeSliceDistance * xyDir;
     }
 
     public float MoveSpeed

@@ -140,7 +140,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 1
+  _timeSliceDistance: 8
   _attackCooldown: 0.5
+  _timeSliceCooldown: 3
   slashPrefab: {fileID: 5880481135495040988, guid: 2aca22344288833428bab341bbc6f62a, type: 3}
   slashPoint: {fileID: 8992259032709385497}
 --- !u!114 &5117024517060933195
@@ -261,7 +263,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 5617527922789716049, guid: a181b4375eda6e34788c36cddba15f24, type: 3}
   m_Color: {r: 1, g: 0.550218, b: 0.13396227, a: 1}
   m_FlipX: 0

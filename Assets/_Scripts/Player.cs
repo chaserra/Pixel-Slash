@@ -6,16 +6,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable
 {
+    public delegate void OnTimeSlash();
+    public event OnTimeSlash e_TimeSlash;
+
     [SerializeField] private int _health = 1;
+    [SerializeField] private float _timeSliceDistance = 8f;
     [SerializeField] private float _attackCooldown = .7f;
+    [SerializeField] private float _timeSliceCooldown = 3f;
     [SerializeField] private GameObject slashPrefab;
     [SerializeField] private GameObject slashPoint;
 
     private ObjectPooler_Slash slashPool;
     private SpriteRenderer sprite;
     private float attackCooldownTimer = 0f;
+    private float timeSliceCooldownTimer = 0f;
     private bool invincible = false;
     private bool _timeShiftActive = false;
+    private bool _canUseTimeShift = true;
 
     private void Awake()
     {
@@ -32,14 +39,28 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        TickAttackCooldown();
+        TickAttackCooldowns();
     }
 
     [Tooltip("Only allow players to attack on a set cooldown.")]
-    private void TickAttackCooldown()
+    private void TickAttackCooldowns()
     {
-        if (attackCooldownTimer <= 0f) { return; }
-        attackCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
+        // Normal Attack
+        if (attackCooldownTimer > 0f)
+        {
+            attackCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
+        }
+
+        // Time Slice
+        if (timeSliceCooldownTimer > 0f)
+        {
+            CanUseTimeShift = false;
+            timeSliceCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
+        }
+        else
+        {
+            CanUseTimeShift = true;
+        }
     }
 
     [Tooltip("Player attack. Spawns a pooled slash object.")]
@@ -65,8 +86,19 @@ public class Player : MonoBehaviour, IDamageable
     [Tooltip("Player dash attack. Attacks in a straight line slashing everything in its path.")]
     public void DashAttack()
     {
-        // TODO: Perform a dash attack
-        Debug.Log("Dash attack!");
+        // Can only time slice if cooldown timer meets the required value
+        if (timeSliceCooldownTimer > 0f) { return; }
+
+        // TODO: Perform time slice logic
+        // Raycast forward
+        // Get all IsAttackable and IsDamageable
+        // Trigger their OnHit methods
+
+        // Call time slash events. (Teleport player forward)
+        e_TimeSlash?.Invoke();
+
+        // Reset cooldown
+        timeSliceCooldownTimer = TimeShiftCooldown;
     }
 
     [Tooltip("Take damage then check if health is zero.")]
@@ -125,16 +157,34 @@ public class Player : MonoBehaviour, IDamageable
         private set { _health = value; }
     }
 
+    public float TimeSliceDistance
+    {
+        get { return _timeSliceDistance; }
+        private set { _timeSliceDistance = value; }
+    }
+
     public float AttackCooldown
     {
         get { return _attackCooldown; }
         private set { _attackCooldown = value; }
     }
 
+    public float TimeShiftCooldown
+    {
+        get { return _timeSliceCooldown; }
+        private set { _timeSliceCooldown = value; }
+    }
+
     public bool TimeShiftActive
     {
         get { return _timeShiftActive; }
         set { _timeShiftActive = value; }
+    }
+
+    public bool CanUseTimeShift
+    {
+        get { return _canUseTimeShift; }
+        private set { _canUseTimeShift = value; }
     }
 
 }
