@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent (typeof(Player), typeof(PlayerController))]
 public class TimeDilation : MonoBehaviour
 {
-    [SerializeField] private float _maxTimeDilationDuration = 5f;
+    [SerializeField] private float _maxTimeDilationDuration = 8f;
 
     private float _timeDilationTimer = 0f;
 

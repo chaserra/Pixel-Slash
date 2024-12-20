@@ -10,11 +10,12 @@ public class Player : MonoBehaviour, IDamageable
     public event OnTimeSlash e_TimeSlash;
 
     [SerializeField] private int _health = 1;
-    [SerializeField] private float _timeSliceDistance = 8f;
+    [SerializeField] private float _timeSliceDistance = 10f;
     [SerializeField] private float _attackCooldown = .7f;
     [SerializeField] private float _timeSliceCooldown = 3f;
     [SerializeField] private GameObject slashPrefab;
     [SerializeField] private GameObject slashPoint;
+    private float raycastThickness = 3f;
 
     private ObjectPooler_Slash slashPool;
     private SpriteRenderer sprite;
@@ -90,9 +91,33 @@ public class Player : MonoBehaviour, IDamageable
         if (timeSliceCooldownTimer > 0f) { return; }
 
         // TODO: Perform time slice logic
+        Vector2 origin = transform.position + new Vector3(-transform.localScale.x / 2f, 0f, 0f);
+        Vector2 boxSize = new Vector2(1f, 1f) + Vector2.right * raycastThickness;
+        Vector2 dir = transform.up;
+
         // Raycast forward
-        // Get all IsAttackable and IsDamageable
-        // Trigger their OnHit methods
+        RaycastHit2D[] hit = Physics2D.BoxCastAll(transform.position, boxSize, 0f, dir, TimeSliceDistance);
+
+        // If another object is hit (aside from the player)
+        if (hit.Length > 1)
+        {
+            // Loop through all hit objects
+            for (int i = 0; i < hit.Length; i++)
+            {
+                // Ignore objects tagged as Player
+                if (hit[i].collider.gameObject.tag == "Player") { continue; }
+
+                // Trigger interface methods for IsAttackable and IsDamageable
+                if (hit[i].collider.TryGetComponent<IAttackable>(out IAttackable attackCol))
+                {
+                    attackCol.IsAttacked(gameObject);
+                }
+                if (hit[i].collider.TryGetComponent<IDamageable>(out IDamageable damageCol))
+                {
+                    damageCol.TakeDamage(gameObject);
+                }
+            }
+        }
 
         // Call time slash events. (Teleport player forward)
         e_TimeSlash?.Invoke();

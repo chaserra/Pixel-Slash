@@ -68,7 +68,8 @@ public class Bullet : MonoBehaviour, IAttackable
     [Tooltip("Gets the bullet's local up direction for movement.")]
     private void GetMoveDirection()
     {
-        movement = transform.TransformDirection(Vector3.up);
+        //movement = transform.TransformDirection(Vector3.up);
+        movement = transform.up;
     }
 
     [Tooltip("Disable object after x amount of time.")]
@@ -90,14 +91,20 @@ public class Bullet : MonoBehaviour, IAttackable
     public void IsAttacked(GameObject source)
     {
         // Check if bullet is perpendicular to the slash
-        Vector3 slashDirection = (source.transform.TransformDirection(Vector3.up)).normalized;
-        Vector3 bulletDirection = (transform.TransformDirection(Vector3.up)).normalized;
+        //Vector3 slashDirection = (source.transform.TransformDirection(Vector3.up)).normalized;
+        //Vector3 bulletDirection = (transform.TransformDirection(Vector3.up)).normalized;
+        Vector3 slashDirection = source.transform.up;
+        Vector3 bulletDirection = transform.up;
 
-        //Debug.Log(Vector3.Dot(slashDirection, bulletDirection));
-
+        // If source is directly from a player (Time Slash)
+        if (source.TryGetComponent<Player>(out var P))
+        {
+            // Flip to opposite direction (back to source of bullet)
+            transform.Rotate(new Vector3(0f, 0f, 180f));
+        }
         // If perpendicular or same direction as slash object
         // Deflect to direction of slash object
-        if (Vector3.Dot(slashDirection, bulletDirection) > -0.75f)
+        else if (Vector3.Dot(slashDirection, bulletDirection) > -0.75f)
         {
             // Get angle between slash and bullet directions
             float angle = Vector2.Angle(slashDirection, bulletDirection);

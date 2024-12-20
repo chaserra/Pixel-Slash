@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 1
-  _timeSliceDistance: 8
+  _timeSliceDistance: 10
   _attackCooldown: 0.5
   _timeSliceCooldown: 3
   slashPrefab: {fileID: 5880481135495040988, guid: 2aca22344288833428bab341bbc6f62a, type: 3}
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a052590ccae71f3428b5d22a34510904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxTimeDilationDuration: 5
+  _maxTimeDilationDuration: 8
 --- !u!114 &6761684968726473265
 MonoBehaviour:
   m_ObjectHideFlags: 0

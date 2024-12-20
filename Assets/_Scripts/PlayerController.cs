@@ -146,8 +146,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTimeSlash()
     {
-        // TODO: Teleport player forward
-        Vector3 direction = (player.transform.TransformDirection(Vector3.up)).normalized;
+        Vector3 direction = player.transform.up;
         Vector2 xyDir = direction;
         transform.position = rb.position + player.TimeSliceDistance * xyDir;
     }
