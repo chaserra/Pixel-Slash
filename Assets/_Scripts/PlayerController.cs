@@ -148,7 +148,24 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 direction = player.transform.up;
         Vector2 xyDir = direction;
-        transform.position = rb.position + player.TimeSliceDistance * xyDir;
+        Vector3 teleportSpot = rb.position + player.TimeSliceDistance * xyDir;
+        
+        // Check for wall collisions
+        int playerLayer = LayerMask.NameToLayer("Player"); // Get Player layer index
+        LayerMask filteredLayer = ~(1 << playerLayer); // Remove player layer from layer mask
+        RaycastHit2D[] raycastToNewPos = Physics2D.LinecastAll(transform.position, teleportSpot, filteredLayer);
+        for (int i = 0; i < raycastToNewPos.Length; i++)
+        {
+            // If a wall is in the path, teleport player to collision point
+            if (raycastToNewPos[i].collider.gameObject.tag == "Wall")
+            {
+                transform.position = raycastToNewPos[i].collider.ClosestPoint(raycastToNewPos[i].point);
+                return;
+            }
+        }
+        // If no wall is found, do a complete dash
+        transform.position = teleportSpot;
+
     }
 
     public float MoveSpeed

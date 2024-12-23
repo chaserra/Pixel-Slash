@@ -90,8 +90,8 @@ public class Player : MonoBehaviour, IDamageable
         // Can only time slice if cooldown timer meets the required value
         if (timeSliceCooldownTimer > 0f) { return; }
 
-        // TODO: Perform time slice logic
-        Vector2 origin = transform.position + new Vector3(-transform.localScale.x / 2f, 0f, 0f);
+        // Raycast properties
+        //Vector2 origin = transform.position + new Vector3(-transform.localScale.x / 2f, 0f, 0f);
         Vector2 boxSize = new Vector2(1f, 1f) + Vector2.right * raycastThickness;
         Vector2 dir = transform.up;
 
@@ -107,9 +107,17 @@ public class Player : MonoBehaviour, IDamageable
                 // Ignore objects tagged as Player
                 if (hit[i].collider.gameObject.tag == "Player") { continue; }
 
+                // Create another raycast between player and hit object
+                int wallLayer = LayerMask.NameToLayer("Wall"); // Get Wall layer index
+                LayerMask filteredLayer = (1 << wallLayer); // Only check for walls
+                RaycastHit2D raycastToHitObject = Physics2D.Linecast(transform.position, hit[i].collider.transform.position, filteredLayer);
+                // Ignore if there's a wall between them
+                if (raycastToHitObject) { continue; }
+
                 // Trigger interface methods for IsAttackable and IsDamageable
                 if (hit[i].collider.TryGetComponent<IAttackable>(out IAttackable attackCol))
                 {
+                    GameManager.Instance.SetHitStopDuration(0.35f);
                     attackCol.IsAttacked(gameObject);
                 }
                 if (hit[i].collider.TryGetComponent<IDamageable>(out IDamageable damageCol))

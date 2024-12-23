@@ -43,6 +43,8 @@ public class HitStop
         GameManager.Instance.IsHitStopActive = true;
         GameManager.Instance.PauseGame();
         yield return new WaitForSeconds(GameManager.Instance.HitStopDuration);
+        // Reset HitStopDuration to original value (for hitstops that take longer)
+        GameManager.Instance.ResetHitStopDuration();
         // Then revert back to normal in-game time
         GameManager.Instance.ResumeGame();
         GameManager.Instance.IsHitStopActive = false;

@@ -97,6 +97,7 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             // TODO: Destroy/Pool enemy
             //Debug.Log(gameObject.name + " has died.");
+            Destroy(gameObject);
         }
     }
 

@@ -11,12 +11,13 @@ public class GameManager : MonoBehaviour
     public event OnHit e_Hit;
 
     // Attributes
-    [SerializeField] private float _hitStopDuration = 0.1f;
+    [SerializeField] private float _originalHitStopDuration = 0.1f;
     [Tooltip("This is the special timescale used for the game. Prevents directly manipulating Unity's timescale.")]
     private float _inGameTimeScale = 1f;
     private float _pauseScale = 0f;
     private float _playScale = 1f;
     private float _slowTimeScale = 0.2f;
+    private float _hitStopDuration = 0.1f;
 
     // State
     private bool _timeSlowed = false;
@@ -82,14 +83,29 @@ public class GameManager : MonoBehaviour
         IsTimeSlowed = true;
     }
 
+    public void SetHitStopDuration(float duration)
+    {
+        HitStopDuration = duration;
+    }
+
+    public void ResetHitStopDuration()
+    {
+        HitStopDuration = OriginalHitStopDuration;
+    }
+
     public void SetInGameTimeScale(float timeValue)
     {
         InGameTimeScale = timeValue;
+    }
+    public float OriginalHitStopDuration
+    {
+        get { return _originalHitStopDuration; }
     }
 
     public float HitStopDuration
     {
         get { return _hitStopDuration; }
+        private set { _hitStopDuration = value; }
     }
 
     public float InGameTimeScale

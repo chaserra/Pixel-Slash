@@ -32,7 +32,17 @@ public class Slash : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        // Get object with the rigidbody component
         Transform collisionParent = collision.attachedRigidbody.transform;
+
+        // Check if there's a wall between the player and the slash object
+        Vector2 origin = transform.position - transform.up;
+        int wallLayer = LayerMask.NameToLayer("Wall");
+        LayerMask layerFilter = 1 << wallLayer;
+
+        // Ignore anything beyond the wall
+        RaycastHit2D hit = Physics2D.Linecast(origin, collisionParent.transform.position, layerFilter);
+        if (hit) { return; }
 
         // Call interface method
         if (collisionParent.TryGetComponent<IAttackable>(out IAttackable attackCol))
