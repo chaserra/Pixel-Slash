@@ -442,7 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 185f4af74ff9c934c900d790ba1461c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitStopDuration: 0.15
+  _originalHitStopDuration: 0.175
 --- !u!4 &181656975
 Transform:
   m_ObjectHideFlags: 0
@@ -819,7 +819,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 22.5
+  orthographic size: 14.4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -895,7 +895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
-  m_AssetsPPU: 16
+  m_AssetsPPU: 24
   m_RefResolutionX: 320
   m_RefResolutionY: 180
   m_CropFrame: 0

@@ -15,6 +15,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private float _timeSliceCooldown = 3f;
     [SerializeField] private GameObject slashPrefab;
     [SerializeField] private GameObject slashPoint;
+    [SerializeField] private GameObject spriteObject;
     private float raycastThickness = 3f;
 
     private ObjectPooler_Slash slashPool;
@@ -41,6 +42,7 @@ public class Player : MonoBehaviour, IDamageable
     private void Update()
     {
         TickAttackCooldowns();
+        spriteObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
     [Tooltip("Only allow players to attack on a set cooldown.")]

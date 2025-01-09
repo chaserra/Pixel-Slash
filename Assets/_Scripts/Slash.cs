@@ -4,15 +4,21 @@ public class Slash : MonoBehaviour
 {
     [SerializeField] private float _maxLifespan = .2f;
     private float lifespanTimer = 0f;
+    private Animator animator;
 
-    private void Start()
+    private void Awake()
     {
-
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
         TickLifetime();
+    }
+
+    private void OnEnable()
+    {
+        animator.Play("Slash Animation");
     }
 
     private void OnDisable()
