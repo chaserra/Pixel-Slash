@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private Player player;
     private Rigidbody2D rb;
-    private Vector2 movement;
+    private Vector2 _movement;
     private Vector2 rotationVector;
 
     // Input System
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
         if (timeShiftAction.ReadValue<float>() > 0f && player.CanUseTimeShift)
         {
             // Stop movement
-            movement = Vector2.zero;
+            _movement = Vector2.zero;
 
             // Trigger time dilate event
             e_ShiftHeld?.Invoke();
@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // Get movement values from Input System
-            movement = moveAction.ReadValue<Vector2>();
+            _movement = moveAction.ReadValue<Vector2>();
 
             // Trigger end of time dilate event
             e_ShiftReleased?.Invoke();
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         // Move via Rigidbody2D
-        rb.MovePosition(rb.position + movement * (MoveSpeed * Time.deltaTime) * GameManager.Instance.InGameTimeScale);
+        rb.MovePosition(rb.position + _movement * (MoveSpeed * Time.deltaTime) * GameManager.Instance.InGameTimeScale);
     }
 
     [Tooltip("Call the correct attack type depending on player state.")]
@@ -176,5 +176,10 @@ public class PlayerController : MonoBehaviour
     public float RotateSpeed
     {
         get { return _rotateSpeed; }
+    }
+
+    public Vector2 MovementVector
+    {
+        get { return _movement; }
     }
 }
