@@ -6,11 +6,12 @@ public class Bullet : MonoBehaviour, IAttackable
 {
     [SerializeField] private float _moveSpeed = 8f;
     [SerializeField] private float _bulletLifespan = 10f;
+    [SerializeField] private GameObject spriteObject;
 
     private Rigidbody2D rb;
     private Collider2D bulletCollider;
     private SpriteRenderer sprite;
-    private TrailRenderer trailRenderer;
+    private ParticleSystem particles;
 
     private float initMoveSpeed;
     private SourceType _sourceType = SourceType.Enemy;
@@ -22,7 +23,7 @@ public class Bullet : MonoBehaviour, IAttackable
         rb = GetComponent<Rigidbody2D>();
         bulletCollider = GetComponent<Collider2D>();
         sprite = GetComponentInChildren<SpriteRenderer>();
-        trailRenderer = GetComponentInChildren<TrailRenderer>();
+        particles = GetComponentInChildren<ParticleSystem>();
         initMoveSpeed = MoveSpeed;
     }
 
@@ -32,16 +33,14 @@ public class Bullet : MonoBehaviour, IAttackable
         rb.WakeUp();
         // Reenable sprite
         sprite.enabled = true;
-        // Reenable trail
-        trailRenderer.emitting = true;
         // Reset lifespan
         lifespan = 0f;
         // Reenable collisions
         bulletCollider.enabled = true;
         // Reset movespeed to original value
         MoveSpeed = initMoveSpeed;
-        // Clear trail
-        trailRenderer.Clear();
+        // Clear particles
+        particles.Clear();
     }
 
     private void Start()
@@ -53,6 +52,7 @@ public class Bullet : MonoBehaviour, IAttackable
     {
         GetMoveDirection();
         Expire();
+        CheckForParticles();
     }
 
     private void FixedUpdate()
@@ -68,7 +68,6 @@ public class Bullet : MonoBehaviour, IAttackable
     [Tooltip("Gets the bullet's local up direction for movement.")]
     private void GetMoveDirection()
     {
-        //movement = transform.TransformDirection(Vector3.up);
         movement = transform.up;
     }
 
@@ -80,6 +79,15 @@ public class Bullet : MonoBehaviour, IAttackable
             Deactivate();
         }
         lifespan += Time.deltaTime * GameManager.Instance.InGameTimeScale;
+    }
+
+    [Tooltip("Completely disables the object when particle effects end.")]
+    private void CheckForParticles()
+    {
+        if (!particles.IsAlive())
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     [Tooltip("Move the bullet towards it's up direction.")]
@@ -130,7 +138,7 @@ public class Bullet : MonoBehaviour, IAttackable
         GameManager.Instance.InvokeOnHitEvents();
     }
 
-    [Tooltip("Soft disable. Allows trail to finish before full deactivation.")]
+    [Tooltip("Soft disable. Allows particle effects to finish before full deactivation.")]
     public void Deactivate()
     {
         // Stop all movement
@@ -140,20 +148,8 @@ public class Bullet : MonoBehaviour, IAttackable
 
         // Deactivate sprite, trail, and collisions
         sprite.enabled = false;
-        trailRenderer.emitting = false;
+        particles.Stop();
         bulletCollider.enabled = false;
-
-        // Wait for trail renderer to finish before fully deactivating the object
-        StartCoroutine(FullyDeactivateObject());
-    }
-
-    [Tooltip("Wait for trail renderer to end before fully disabling the object.")]
-    private IEnumerator FullyDeactivateObject()
-    {
-        // Wait for trail emission to end
-        yield return new WaitForSeconds(trailRenderer.time);
-        // Then deactivate the object
-        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

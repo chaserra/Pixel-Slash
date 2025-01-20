@@ -6,18 +6,22 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] private int _health = 1;
     [SerializeField] private float _shootBaseCooldown = 5f;
     [SerializeField] private float _rotateSpeed = 5f;
+    [SerializeField] private GameObject spriteObject;
 
     private Player targetPlayer;
     private ObjectPooler_Bullet bulletPool;
     private SpriteRenderer spriteRenderer;
+    private Animator animator;
     private float shootCooldown;
     private float shootTimer = 0f;
+    private bool isAttacking = false;
 
     private void Awake()
     {
         // Get bullet object pooling instance
         bulletPool = ObjectPooler_Bullet.Instance;
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -30,6 +34,7 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         LookAtTarget();
         Shoot();
+        spriteObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
     [Tooltip("Look at player.")]
@@ -49,16 +54,43 @@ public class Enemy : MonoBehaviour, IDamageable
     [Tooltip("Shoot bullets every set time with random offset.")]
     private void Shoot()
     {
-        if (shootTimer >= shootCooldown)
+        if (shootTimer >= shootCooldown && !isAttacking)
         {
             // Flash sprite then shoot
-            StartCoroutine(ShootCoroutine());
+            //StartCoroutine(ShootCoroutine());
             // Reset cooldown and generate new cooldown value
-            shootTimer = 0f;
-            GenerateShootCooldown();
+            //shootTimer = 0f;
+            //GenerateShootCooldown();
+            isAttacking = true;
+            animator.SetTrigger("StartAttack");
         }
         // Increment timer
         shootTimer += Time.deltaTime * GameManager.Instance.InGameTimeScale;
+    }
+
+    [Tooltip("Triggered by animation event.")]
+    public void OnAttack()
+    {
+
+    }
+
+    [Tooltip("Triggered by animation event. Shoots a bullet object.")]
+    public void OnShoot()
+    {
+        GameObject bullet = bulletPool.GetPooledObject();
+        // Spawn in front of this unit and copy rotation
+        bullet.transform.position = transform.position;
+        bullet.transform.rotation = transform.rotation;
+        // Set tag and layer
+        bullet.gameObject.tag = gameObject.tag;
+        bullet.gameObject.layer = LayerMask.NameToLayer("Trigger");
+        // Activate the bullet
+        bullet.SetActive(true);
+
+        // Reset cooldown and generate new cooldown value
+        shootTimer = 0f;
+        GenerateShootCooldown();
+        isAttacking = false;
     }
 
     private IEnumerator ShootCoroutine()
