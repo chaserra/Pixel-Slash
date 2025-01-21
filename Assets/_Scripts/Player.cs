@@ -16,9 +16,11 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private GameObject slashPrefab;
     [SerializeField] private GameObject slashPoint;
     [SerializeField] private GameObject spriteObject;
+    [SerializeField] private GameObject dashPrefab;
     private float raycastThickness = 3f;
 
     private ObjectPooler_Slash slashPool;
+    private ObjectPooler_Dash dashPool;
     private SpriteRenderer sprite;
     private float attackCooldownTimer = 0f;
     private float timeSliceCooldownTimer = 0f;
@@ -28,8 +30,9 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        // Get slash object pooling instance
+        // Get object pooling instances
         slashPool = ObjectPooler_Slash.Instance;
+        dashPool = ObjectPooler_Dash.Instance;
         // Get reference to sprite renderer
         sprite = GetComponentInChildren<SpriteRenderer>();
     }
@@ -129,8 +132,18 @@ public class Player : MonoBehaviour, IDamageable
             }
         }
 
+        // Enable dash effect
+        // Find a pooled dash object
+        GameObject dash = dashPool.GetPooledObject();
+        // Spawn in front of the player and copy rotation
+        dash.transform.position = transform.position;
+        dash.transform.rotation = transform.rotation;
+
         // Call time slash events. (Teleport player forward)
         e_TimeSlash?.Invoke();
+
+        // Activate slash
+        dash.SetActive(true);
 
         // Reset cooldown
         timeSliceCooldownTimer = TimeShiftCooldown;
@@ -182,6 +195,19 @@ public class Player : MonoBehaviour, IDamageable
             {
                 // Initialise pooled objects
                 slashPool.InitialisePooling();
+            }
+        }
+
+        // If a Dash Object Pool exists
+        if (dashPool != null)
+        {
+            // Assign dash prefab
+            dashPool.ObjectToPool = dashPrefab;
+            // If sanity check passes
+            if (dashPool.TypeSanityCheck())
+            {
+                // Initialise pooled objects
+                dashPool.InitialisePooling();
             }
         }
     }

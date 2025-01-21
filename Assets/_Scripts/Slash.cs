@@ -4,11 +4,10 @@ public class Slash : MonoBehaviour
 {
     [SerializeField] private float _maxLifespan = .2f;
     private float lifespanTimer = 0f;
-    private Animator animator;
 
     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+
     }
 
     private void Update()
@@ -18,7 +17,7 @@ public class Slash : MonoBehaviour
 
     private void OnEnable()
     {
-        animator.Play("Slash Animation");
+
     }
 
     private void OnDisable()
@@ -54,6 +53,14 @@ public class Slash : MonoBehaviour
         if (collisionParent.TryGetComponent<IAttackable>(out IAttackable attackCol))
         {
             attackCol.IsAttacked(gameObject);
+
+            // Find a pooled VFX
+            GameObject hitVFX = ObjectPooler_Hit.Instance.GetPooledObject();
+            // Spawn on the hit object and copy rotation
+            hitVFX.transform.position = collisionParent.transform.position;
+            hitVFX.transform.rotation = transform.rotation;
+            // Activate hit vfx
+            hitVFX.SetActive(true);
         }
         if (collisionParent.TryGetComponent<IDamageable>(out IDamageable damageCol))
         {
