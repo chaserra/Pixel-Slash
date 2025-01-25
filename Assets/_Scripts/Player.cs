@@ -161,6 +161,8 @@ public class Player : MonoBehaviour, IDamageable
         // Flash player sprite
         StartCoroutine(SpriteEffects.FlashSprite(sprite, 0.25f));
 
+        // TODO: Play health UI animation
+
         if (Health <= 0 )
         {
             // TODO: Game Over
