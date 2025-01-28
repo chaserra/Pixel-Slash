@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     // Events
     public delegate void OnHit();
     public event OnHit e_Hit;
+    public delegate void OnPlayerTakeDamage();
+    public event OnPlayerTakeDamage e_PlayerTakeDamage;
 
     // Attributes
     [SerializeField] private float _originalHitStopDuration = 0.1f;
@@ -57,6 +59,12 @@ public class GameManager : MonoBehaviour
     public void InvokeOnHitEvents()
     {
         e_Hit?.Invoke();
+    }
+
+    [Tooltip("Adapter method to call PlayerTakeDamage events.")]
+    public void InvokePlayerTakeDamageEvents()
+    {
+        e_PlayerTakeDamage?.Invoke();
     }
 
     [Tooltip("Pauses the game using the game's special timescale. This will not affect Unity's built-in timescale. If you want to hard pause the game, modify Unity's timescale value instead.")]

@@ -28,6 +28,9 @@ public class Player : MonoBehaviour, IDamageable
     private bool _timeShiftActive = false;
     private bool _canUseTimeShift = true;
 
+    private HealthBar healthBar;
+    private EnergyBar energyBar;
+
     private void Awake()
     {
         // Get object pooling instances
@@ -35,6 +38,9 @@ public class Player : MonoBehaviour, IDamageable
         dashPool = ObjectPooler_Dash.Instance;
         // Get reference to sprite renderer
         sprite = GetComponentInChildren<SpriteRenderer>();
+        // Get UI Stuff
+        healthBar = FindFirstObjectByType<HealthBar>();
+        energyBar = FindFirstObjectByType<EnergyBar>();
     }
 
     private void Start()
@@ -161,7 +167,9 @@ public class Player : MonoBehaviour, IDamageable
         // Flash player sprite
         StartCoroutine(SpriteEffects.FlashSprite(sprite, 0.25f));
 
-        // TODO: Play health UI animation
+        // Play health UI animation
+        healthBar.IsDamaged();
+        GameManager.Instance.InvokePlayerTakeDamageEvents();
 
         if (Health <= 0 )
         {
