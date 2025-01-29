@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         InGameTimeScale = timeValue;
     }
+
     public float OriginalHitStopDuration
     {
         get { return _originalHitStopDuration; }

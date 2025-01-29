@@ -125,6 +125,10 @@ public class Enemy : MonoBehaviour, IDamageable
         //Debug.Log("Took damage from " + source.name + " from " + source.gameObject.tag);
         Health--;
 
+        // Invoke OnHit events
+        GameManager.Instance.SetHitStopDuration(0.35f);
+        GameManager.Instance.InvokeOnHitEvents();
+
         if (Health <= 0)
         {
             // TODO: Destroy/Pool enemy
