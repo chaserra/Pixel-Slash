@@ -22,6 +22,7 @@ public class SpriteController : MonoBehaviour
 
     private void PlayAnimation()
     {
+        anim.speed = GameManager.Instance.InGameTimeScale;
         movementVector = playerController.MovementVector;
         if (movementVector.x > 0)
         {

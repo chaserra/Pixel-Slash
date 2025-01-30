@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Player : MonoBehaviour, IDamageable
 {
     public delegate void OnTimeSlash();
@@ -64,10 +63,12 @@ public class Player : MonoBehaviour, IDamageable
         }
 
         // Time Slice
-        if (timeSliceCooldownTimer > 0f)
+        //if (timeSliceCooldownTimer > 0f)
+        // TODO: Fix timeshift allow logic. Let player hold until 0 but prevent use again until full.
+        if (energyBar.EnergyRatio < .2f)
         {
             CanUseTimeShift = false;
-            timeSliceCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
+            //timeSliceCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
         }
         else
         {
@@ -88,7 +89,7 @@ public class Player : MonoBehaviour, IDamageable
         slash.transform.rotation = transform.rotation;
         // Set tag and layer
         slash.gameObject.tag = "Player";
-        slash.gameObject.layer = LayerMask.NameToLayer("Player");
+        //slash.gameObject.layer = LayerMask.NameToLayer("Player");
         // Activate slash
         slash.SetActive(true);
         // Reset attack cooldown timer
@@ -99,7 +100,8 @@ public class Player : MonoBehaviour, IDamageable
     public void DashAttack()
     {
         // Can only time slice if cooldown timer meets the required value
-        if (timeSliceCooldownTimer > 0f) { return; }
+        //if (timeSliceCooldownTimer > 0f) { return; }
+        if (energyBar.EnergyRatio <= 0f) { return; }
 
         // Raycast properties
         //Vector2 origin = transform.position + new Vector3(-transform.localScale.x / 2f, 0f, 0f);
@@ -152,7 +154,7 @@ public class Player : MonoBehaviour, IDamageable
         dash.SetActive(true);
 
         // Reset cooldown
-        timeSliceCooldownTimer = TimeShiftCooldown;
+        //timeSliceCooldownTimer = TimeShiftCooldown;
     }
 
     [Tooltip("Take damage then check if health is zero.")]

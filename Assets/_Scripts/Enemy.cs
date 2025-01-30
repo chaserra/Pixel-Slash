@@ -4,6 +4,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private int _health = 1;
+    [SerializeField] private float _range = 10f;
     [SerializeField] private float _shootBaseCooldown = 5f;
     [SerializeField] private float _rotateSpeed = 5f;
     [SerializeField] private GameObject spriteObject;
@@ -15,6 +16,12 @@ public class Enemy : MonoBehaviour, IDamageable
     private float shootCooldown;
     private float shootTimer = 0f;
     private bool isAttacking = false;
+
+    public void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _range);
+    }
 
     private void Awake()
     {
@@ -32,6 +39,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        if (!AcquireTarget()) { return; }
         LookAtTarget();
         Shoot();
         spriteObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
@@ -49,6 +57,32 @@ public class Enemy : MonoBehaviour, IDamageable
         Quaternion rotation = Quaternion.AngleAxis(angle - offset, Vector3.forward);
         // Rotate the player
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, RotateSpeed * Time.deltaTime * GameManager.Instance.InGameTimeScale);
+    }
+
+    private bool AcquireTarget()
+    {
+        int playerLayer = LayerMask.NameToLayer("Player");
+        LayerMask filteredLayer = (1 << playerLayer);
+
+        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, _range, filteredLayer);
+
+        for (int i = 0; i < col.Length; i++)
+        {
+            if (col[i].gameObject.tag == "Player")
+            {
+                filteredLayer |= (1 << LayerMask.NameToLayer("Wall"));
+                RaycastHit2D hit = Physics2D.Linecast(transform.position, col[i].transform.position, filteredLayer);
+
+                if (hit)
+                {
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     [Tooltip("Shoot bullets every set time with random offset.")]

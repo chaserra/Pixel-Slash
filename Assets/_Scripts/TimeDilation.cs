@@ -60,7 +60,7 @@ public class TimeDilation : MonoBehaviour
             if (_timeDilationTimer < _maxTimeDilationDuration)
             {
                 // Increment timer
-                _timeDilationTimer += Time.deltaTime;
+                _timeDilationTimer += Time.deltaTime * 2f;
 
                 // If timer is 60% of max allowed. And ensure timescale does not go higher than 1
                 if (EnergyRatio < .4f &&
@@ -82,7 +82,7 @@ public class TimeDilation : MonoBehaviour
         {
             if (_timeDilationTimer > 0f)
             {
-                _timeDilationTimer -= 2f * Time.deltaTime;
+                _timeDilationTimer -= Time.deltaTime;
                 _timeDilationTimer = Mathf.Clamp(_timeDilationTimer, 0f, _maxTimeDilationDuration);
             }
         }
