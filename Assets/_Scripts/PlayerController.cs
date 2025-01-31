@@ -1,10 +1,5 @@
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
-using static Player;
-using static PlayerController;
-using static Unity.VisualScripting.Member;
 
 [RequireComponent(typeof(Player))]
 public class PlayerController : MonoBehaviour
@@ -47,6 +42,7 @@ public class PlayerController : MonoBehaviour
         playerInput.actions.FindActionMap("Movement").Enable();
         playerInput.actions.FindActionMap("Time Dilation").Enable();
         attackAction.performed += OnAttack;
+        timeShiftAction.canceled += OnTimeShiftCancel;
         player.e_TimeSlash += OnTimeSlash;
     }
 
@@ -71,6 +67,7 @@ public class PlayerController : MonoBehaviour
         playerInput.actions.FindActionMap("Movement").Disable();
         playerInput.actions.FindActionMap("Time Dilation").Disable();
         attackAction.performed -= OnAttack;
+        timeShiftAction.canceled -= OnTimeShiftCancel;
         player.e_TimeSlash -= OnTimeSlash;
     }
 
@@ -92,7 +89,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // Get movement values from Input System
-            _movement = moveAction.ReadValue<Vector2>();
+            _movement = moveAction.ReadValue<Vector2>();;
 
             // Trigger end of time dilate event
             e_ShiftReleased?.Invoke();
@@ -117,6 +114,12 @@ public class PlayerController : MonoBehaviour
         {
             player.DashAttack();
         }
+    }
+
+    [Tooltip("Set recently time shifted flag on button release.")]
+    private void OnTimeShiftCancel(InputAction.CallbackContext context)
+    {
+        player.RecentlyTimeShifted = true;
     }
 
     [Tooltip("Rotate player towards movement direction.")]

@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IDamageable
@@ -11,7 +9,6 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private int _health = 1;
     [SerializeField] private float _timeSliceDistance = 10f;
     [SerializeField] private float _attackCooldown = .7f;
-    [SerializeField] private float _timeSliceCooldown = 3f;
     [SerializeField] private GameObject slashPrefab;
     [SerializeField] private GameObject slashPoint;
     [SerializeField] private GameObject spriteObject;
@@ -22,10 +19,10 @@ public class Player : MonoBehaviour, IDamageable
     private ObjectPooler_Dash dashPool;
     private SpriteRenderer sprite;
     private float attackCooldownTimer = 0f;
-    private float timeSliceCooldownTimer = 0f;
     private bool invincible = false;
     private bool _timeShiftActive = false;
     private bool _canUseTimeShift = true;
+    private bool _recentlyTimeShifted = false;
 
     private HealthBar healthBar;
     private EnergyBar energyBar;
@@ -50,10 +47,11 @@ public class Player : MonoBehaviour, IDamageable
     private void Update()
     {
         TickAttackCooldowns();
+        // Make sure sprite is upright
         spriteObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
     }
 
-    [Tooltip("Only allow players to attack on a set cooldown.")]
+    [Tooltip("Only allow players to attack on a set cooldown or conditions.")]
     private void TickAttackCooldowns()
     {
         // Normal Attack
@@ -63,16 +61,30 @@ public class Player : MonoBehaviour, IDamageable
         }
 
         // Time Slice
-        //if (timeSliceCooldownTimer > 0f)
-        // TODO: Fix timeshift allow logic. Let player hold until 0 but prevent use again until full.
-        if (energyBar.EnergyRatio < .2f)
+        if (_recentlyTimeShifted)
         {
-            CanUseTimeShift = false;
-            //timeSliceCooldownTimer -= Time.deltaTime * GameManager.Instance.InGameTimeScale;
+            // Wait for energy to fill up
+            _canUseTimeShift = false;
+
+            // If energy is full
+            if (energyBar.EnergyRatio >= 1f)
+            {
+                // Remove flag
+                _recentlyTimeShifted = false;
+            }
         }
+        // If energy is full (no longer recently TimeShifted)
         else
         {
-            CanUseTimeShift = true;
+            // Reenable TimeShift
+            _canUseTimeShift = true;
+        }
+
+        // If all energy is used up
+        if (energyBar.EnergyRatio <= 0f)
+        {
+            // Disallow TimeShift
+            _recentlyTimeShifted = true;
         }
     }
 
@@ -100,7 +112,6 @@ public class Player : MonoBehaviour, IDamageable
     public void DashAttack()
     {
         // Can only time slice if cooldown timer meets the required value
-        //if (timeSliceCooldownTimer > 0f) { return; }
         if (energyBar.EnergyRatio <= 0f) { return; }
 
         // Raycast properties
@@ -154,7 +165,7 @@ public class Player : MonoBehaviour, IDamageable
         dash.SetActive(true);
 
         // Reset cooldown
-        //timeSliceCooldownTimer = TimeShiftCooldown;
+        _recentlyTimeShifted = true;
     }
 
     [Tooltip("Take damage then check if health is zero.")]
@@ -180,11 +191,9 @@ public class Player : MonoBehaviour, IDamageable
         }
         else
         {
-            // TODO: Move sprite flash here
-            // TODO: Move invincibility here
+            // Start invincibility after getting hit
+            StartCoroutine(AfterHitInvincibility());
         }
-        // Start invincibility after getting hit
-        StartCoroutine(AfterHitInvincibility());
     }
 
     private IEnumerator AfterHitInvincibility()
@@ -242,16 +251,16 @@ public class Player : MonoBehaviour, IDamageable
         private set { _attackCooldown = value; }
     }
 
-    public float TimeShiftCooldown
-    {
-        get { return _timeSliceCooldown; }
-        private set { _timeSliceCooldown = value; }
-    }
-
     public bool TimeShiftActive
     {
         get { return _timeShiftActive; }
         set { _timeShiftActive = value; }
+    }
+
+    public bool RecentlyTimeShifted
+    {
+        get { return _recentlyTimeShifted; }
+        set { _recentlyTimeShifted = value; }
     }
 
     public bool CanUseTimeShift

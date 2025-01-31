@@ -1,5 +1,3 @@
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour, IAttackable
@@ -99,8 +97,6 @@ public class Bullet : MonoBehaviour, IAttackable
     public void IsAttacked(GameObject source)
     {
         // Check if bullet is perpendicular to the slash
-        //Vector3 slashDirection = (source.transform.TransformDirection(Vector3.up)).normalized;
-        //Vector3 bulletDirection = (transform.TransformDirection(Vector3.up)).normalized;
         Vector3 slashDirection = source.transform.up;
         Vector3 bulletDirection = transform.up;
 

@@ -160,7 +160,7 @@ public class Enemy : MonoBehaviour, IDamageable
         Health--;
 
         // Invoke OnHit events
-        GameManager.Instance.SetHitStopDuration(0.35f);
+        GameManager.Instance.SetHitStopDuration(0.3f);
         GameManager.Instance.InvokeOnHitEvents();
 
         if (Health <= 0)

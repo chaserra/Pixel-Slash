@@ -1,5 +1,4 @@
 using UnityEngine;
-using static Player;
 
 [RequireComponent (typeof(Player), typeof(PlayerController))]
 public class TimeDilation : MonoBehaviour
@@ -45,7 +44,6 @@ public class TimeDilation : MonoBehaviour
         _player.e_TimeSlash -= OnTimeSlash;
     }
 
-    // TODO: Fix GameManager property setting. Try to abstract as much as possible
     [Tooltip("Slowly return time speed to normal while time dilation is active.")]
     private void TimeDilationDecay()
     {
@@ -90,7 +88,6 @@ public class TimeDilation : MonoBehaviour
 
     public void ActivateTimeDilation()
     {
-        // TODO: Activate line indicator + other vfx
         // Slow down time via time dilation
         GameManager.Instance.SlowDownTime();
         _player.TimeShiftActive = true;
@@ -98,7 +95,6 @@ public class TimeDilation : MonoBehaviour
 
     public void DeactivateTimeDilation()
     {
-        // TODO: Deactivate line indicator + other vfx
         // Cancel time dilation
         GameManager.Instance.ResumeGame();
         GameManager.Instance.IsTimeSlowed = false;
