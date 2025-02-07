@@ -95,7 +95,6 @@ MonoBehaviour:
   _health: 1
   _timeSliceDistance: 10
   _attackCooldown: 0.5
-  _timeSliceCooldown: 3
   slashPrefab: {fileID: 5880481135495040988, guid: 2aca22344288833428bab341bbc6f62a, type: 3}
   slashPoint: {fileID: 8992259032709385497}
   spriteObject: {fileID: 4662802819589580594}
@@ -366,8 +365,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.19170749}
-  m_Size: {x: 0.60601854, y: 1.2131746}
+  m_Offset: {x: 0, y: -0.24124965}
+  m_Size: {x: 0.60601854, y: 1.1140912}
   m_Direction: 0
 --- !u!95 &6690325287452209391
 Animator:
