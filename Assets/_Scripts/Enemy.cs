@@ -35,6 +35,8 @@ public class Enemy : MonoBehaviour, IDamageable
     {
         targetPlayer = FindFirstObjectByType<Player>();
         GenerateShootCooldown();
+        // Shoot on first sight <3
+        shootTimer = shootCooldown;
     }
 
     private void Update()
@@ -147,7 +149,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [Tooltip("Generates a new shoot cooldown with a random offset for variety.")]
     private void GenerateShootCooldown()
     {
-        shootCooldown = Random.Range(-2f, 5f) + ShootBaseCooldown;
+        shootCooldown = Random.Range(-2f, 2f) + ShootBaseCooldown;
     }
 
     [Tooltip("Take damage then check if health is zero.")]
@@ -165,8 +167,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
         if (Health <= 0)
         {
-            // TODO: Destroy/Pool enemy
-            //Debug.Log(gameObject.name + " has died.");
+            GameManager.Instance.InvokeOnEnemyDeathEvents();
             Destroy(gameObject);
         }
     }

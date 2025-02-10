@@ -60,7 +60,7 @@ public abstract class ObjectPooler : MonoBehaviour
         return newObj;
     }
 
-    protected int InitialNumberToPool
+    public int InitialNumberToPool
     {
         get { return _initialNumToPool; }
     }

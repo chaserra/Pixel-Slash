@@ -44,5 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f1a042d4c6bfb14c9c9fcacd888c73f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialNumToPool: 5
+  _initialNumToPool: 100
   enemyPrefab: {fileID: 7236275690041204540, guid: 8954450481d79d64dac09c604a9b23d5, type: 3}
+  areaSize: {x: 100, y: 100}
+  minDistanceFromWall: 2
+  minDistanceFromEnemy: 4
+  minDistanceFromPlayer: 15

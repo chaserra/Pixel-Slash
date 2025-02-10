@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public event OnHit e_Hit;
     public delegate void OnPlayerTakeDamage();
     public event OnPlayerTakeDamage e_PlayerTakeDamage;
+    public delegate void OnEnemyDeath();
+    public event OnEnemyDeath e_EnemyDeath;
 
     // Attributes
     [SerializeField] private float _originalHitStopDuration = 0.1f;
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour
     // State
     private bool _timeSlowed = false;
     private bool _isHitStopActive = false;
+    private int _numEnemies = 0;
 
     // References
     private HitStop _hitStop;
@@ -47,7 +50,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        
+        _numEnemies = FindFirstObjectByType<ObjectPooler_Enemy>().InitialNumberToPool;
     }
 
     private void Update()
@@ -65,6 +68,17 @@ public class GameManager : MonoBehaviour
     public void InvokePlayerTakeDamageEvents()
     {
         e_PlayerTakeDamage?.Invoke();
+    }
+
+    [Tooltip("Adapter method to call OnEnemyDeath events.")]
+    public void InvokeOnEnemyDeathEvents()
+    {
+        _numEnemies--;
+        e_EnemyDeath?.Invoke();
+        if (_numEnemies <= 0)
+        {
+            // TODO: You Win!
+        }
     }
 
     [Tooltip("Pauses the game using the game's special timescale. This will not affect Unity's built-in timescale. If you want to hard pause the game, modify Unity's timescale value instead.")]

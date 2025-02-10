@@ -68182,6 +68182,14 @@ PrefabInstance:
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 4679403599125392678, guid: db975a68f2c3a9e48bd53eb2f30e789d, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 5452089423803189242, guid: db975a68f2c3a9e48bd53eb2f30e789d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5586707342081086085, guid: db975a68f2c3a9e48bd53eb2f30e789d, type: 3}
       propertyPath: m_Name
       value: UI Canvas
@@ -68189,6 +68197,10 @@ PrefabInstance:
     - target: {fileID: 5586707342081086085, guid: db975a68f2c3a9e48bd53eb2f30e789d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740761833934392544, guid: db975a68f2c3a9e48bd53eb2f30e789d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
