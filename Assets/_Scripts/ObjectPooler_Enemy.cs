@@ -22,7 +22,7 @@ public class ObjectPooler_Enemy : ObjectPooler
         {
             _instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         base.Awake();
         ObjectToPool = enemyPrefab;
     }

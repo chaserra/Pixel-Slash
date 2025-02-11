@@ -18,7 +18,7 @@ public class ObjectPooler_Hit : ObjectPooler
         {
             _instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         base.Awake();
         ObjectToPool = hitPrefab;
     }

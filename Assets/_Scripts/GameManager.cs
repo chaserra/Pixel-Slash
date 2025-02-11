@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     // Singleton
-    public static GameManager _instance;
+    private static GameManager _instance;
     public static GameManager Instance { get { return _instance; } }
 
     // Events
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private float _hitStopDuration = 0.1f;
 
     // State
+    private bool _isGamePaused = false;
     private bool _timeSlowed = false;
     private bool _isHitStopActive = false;
     private int _numEnemies = 0;
@@ -33,6 +34,9 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        // Ensure Unity timeScale is reset
+        Time.timeScale = 1f;
+
         // Setup Singleton
         if (_instance != null && _instance != this)
         {
@@ -42,7 +46,7 @@ public class GameManager : MonoBehaviour
         {
             _instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         // Create new HitStop class
         _hitStop = new HitStop(this);
@@ -92,8 +96,22 @@ public class GameManager : MonoBehaviour
     {
         if (_isHitStopActive) { return; } // Prioritise hitstop effect
         InGameTimeScale = _playScale;
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
         //IsTimeSlowed = false;
+    }
+
+    [Tooltip("Fully pauses the game using Unity's timeScale.")]
+    public void FullPause()
+    {
+        Time.timeScale = 0f;
+        _isGamePaused = true;
+    }
+
+    [Tooltip("Fully resumes the game using Unity's timeScale.")]
+    public void FullResume()
+    {
+        Time.timeScale = 1f;
+        _isGamePaused = false;
     }
 
     [Tooltip("Slows down the game using a special timescale.")]
@@ -140,6 +158,11 @@ public class GameManager : MonoBehaviour
     public float SlowTimeScale
     {
         get { return _slowTimeScale; }
+    }
+
+    public bool IsGamePaused
+    {
+        get { return _isGamePaused; }
     }
 
     public bool IsTimeSlowed

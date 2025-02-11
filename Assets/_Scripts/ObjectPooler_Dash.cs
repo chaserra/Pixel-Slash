@@ -16,7 +16,7 @@ public class ObjectPooler_Dash : ObjectPooler
         {
             _instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         base.Awake();
     }
 

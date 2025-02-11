@@ -53,6 +53,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // Do not get input if game is paused
+        if (GameManager.Instance.IsGamePaused) { return; }
+
         GetInput();
         Rotate();
     }
@@ -106,6 +109,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Call the correct attack type depending on player state.")]
     private void OnAttack(InputAction.CallbackContext context)
     {
+        // Ignore all when game is paused
+        if (GameManager.Instance.IsGamePaused) { return; }
+
         if (!player.TimeShiftActive)
         {
             player.Attack();
@@ -119,6 +125,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Set recently time shifted flag on button release.")]
     private void OnTimeShiftCancel(InputAction.CallbackContext context)
     {
+        // Ignore all when game is paused
+        if (GameManager.Instance.IsGamePaused) { return; }
+
         player.RecentlyTimeShifted = true;
     }
 
@@ -149,6 +158,9 @@ public class PlayerController : MonoBehaviour
 
     public void OnTimeSlash()
     {
+        // Ignore all when game is paused
+        if (GameManager.Instance.IsGamePaused) { return; }
+
         Vector3 direction = player.transform.up;
         Vector2 xyDir = direction;
         Vector3 teleportSpot = rb.position + player.TimeSliceDistance * xyDir;

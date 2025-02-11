@@ -16,7 +16,7 @@ public class ObjectPooler_Slash : ObjectPooler
         {
             _instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         base.Awake();
     }
 
