@@ -37,7 +37,7 @@ public class UIShake : MonoBehaviour
 
     IEnumerator Shake()
     {
-        while (timer < shakeDuration)
+        while (timer < shakeDuration && !GameManager.Instance.IsGameOver)
         {
             float vertical = Random.Range(-magnitude, magnitude);
             float horizontal = Random.Range(-magnitude, magnitude);

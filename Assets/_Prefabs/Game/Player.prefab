@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ccb60a8f18197a4698ee017dbeddd10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 1
+  _health: 3
   _timeSliceDistance: 10
   _attackCooldown: 0.45
   slashPrefab: {fileID: 5880481135495040988, guid: 2aca22344288833428bab341bbc6f62a, type: 3}
@@ -193,6 +193,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: ca05b72d-acdd-46ff-bfba-0b640f3a27fc
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1d92a678-a1c4-4c82-903c-049a82e8fd83
+    m_ActionName: 'Movement/Pause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fe2f11e2-df10-4719-89f2-ef3108820e9e
+    m_ActionName: 'UI/Pause[/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Movement

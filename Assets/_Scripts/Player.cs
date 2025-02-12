@@ -184,10 +184,11 @@ public class Player : MonoBehaviour, IDamageable
         healthBar.IsDamaged();
         GameManager.Instance.InvokePlayerTakeDamageEvents();
 
-        if (Health <= 0 )
+        if (Health <= 0)
         {
-            // TODO: Game Over
-            //Debug.Log("Player has died.");
+            // Game Over
+            // TODO: Play death animation then call death event
+            GameManager.Instance.InvokeGameOver();
         }
         else
         {

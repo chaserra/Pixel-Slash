@@ -11,8 +11,12 @@ public class GameManager : MonoBehaviour
     public event OnHit e_Hit;
     public delegate void OnPlayerTakeDamage();
     public event OnPlayerTakeDamage e_PlayerTakeDamage;
-    public delegate void OnEnemyDeath();
-    public event OnEnemyDeath e_EnemyDeath;
+    //public delegate void OnEnemyDeath();
+    //public event OnEnemyDeath e_EnemyDeath;
+    public delegate void OnPlayerWin();
+    public event OnPlayerWin e_PlayerWin;
+    public delegate void OnGameOver();
+    public event OnGameOver e_GameOver;
 
     // Attributes
     [SerializeField] private float _originalHitStopDuration = 0.1f;
@@ -28,6 +32,7 @@ public class GameManager : MonoBehaviour
     private bool _timeSlowed = false;
     private bool _isHitStopActive = false;
     private int _numEnemies = 0;
+    private bool _isGameOver = false;
 
     // References
     private HitStop _hitStop;
@@ -74,18 +79,28 @@ public class GameManager : MonoBehaviour
         e_PlayerTakeDamage?.Invoke();
     }
 
-    [Tooltip("Adapter method to call OnEnemyDeath events.")]
+    [Tooltip("Adapter method to call events related to enemy deaths.")]
     public void InvokeOnEnemyDeathEvents()
     {
         _numEnemies--;
-        e_EnemyDeath?.Invoke();
+        //e_EnemyDeath?.Invoke();
         if (_numEnemies <= 0)
         {
-            // TODO: You Win!
+            // Player wins
+            e_PlayerWin?.Invoke();
+            FullPause();
         }
     }
 
-    [Tooltip("Pauses the game using the game's special timescale. This will not affect Unity's built-in timescale. If you want to hard pause the game, modify Unity's timescale value instead.")]
+    [Tooltip("Adapter method to call events after a game over.")]
+    public void InvokeGameOver()
+    {
+        _isGameOver = true;
+        e_GameOver?.Invoke();
+        FullPause();
+    }
+
+    [Tooltip("Pauses the game using the game's special timescale. This will not affect Unity's built-in timescale. If you want to hard pause the game, then use FullPause")]
     public void PauseGame()
     {
         InGameTimeScale = _pauseScale;
@@ -175,6 +190,11 @@ public class GameManager : MonoBehaviour
     {
         get { return _isHitStopActive; }
         set { _isHitStopActive = value; }
+    }
+
+    public bool IsGameOver
+    {
+        get { return _isGameOver; }
     }
 
 }

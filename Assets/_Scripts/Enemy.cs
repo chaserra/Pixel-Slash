@@ -165,6 +165,7 @@ public class Enemy : MonoBehaviour, IDamageable
         GameManager.Instance.SetHitStopDuration(0.3f);
         GameManager.Instance.InvokeOnHitEvents();
 
+        // Die
         if (Health <= 0)
         {
             GameManager.Instance.InvokeOnEnemyDeathEvents();
